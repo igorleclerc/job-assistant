@@ -3,7 +3,6 @@ import React, { useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useApplicationsStore } from "@/lib/stores/use-applications-store";
 import * as d3 from "d3";
-import { motion } from "framer-motion";
 
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
@@ -180,8 +179,8 @@ function BarChart({ data }: BarChartProps) {
       tooltip.transition().duration(200).style("opacity", 1);
       tooltip
         .html(`
-          <div class="font-medium">${d.month}</div>
-          <div class="text-sm text-muted-foreground">${d.count} candidatures</div>
+          <div class="font-medium">${(d as { month: string }).month}</div>
+          <div class="text-sm text-muted-foreground">${(d as { count: number }).count} candidatures</div>
         `)
         .style("left", (event as MouseEvent).pageX + 10 + "px")
         .style("top", (event as MouseEvent).pageY - 28 + "px");
