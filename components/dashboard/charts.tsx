@@ -1,311 +1,204 @@
 "use client";
 import React, { useMemo } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { useApplicationsStore } from "@/lib/stores/use-applications-store";
-import * as d3 from "d3";
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Pie, PieChart, Cell, ResponsiveContainer, Legend } from "recharts";
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
 
-const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
+// Définition des couleurs directes
+const COLORS = {
+  pending: "#0ea5e9", // bleu
+  interview: "#f59e0b", // orange
+  accepted: "#10b981", // vert
+  rejected: "#ef4444", // rouge
+} as const;
+
+type StatusType = keyof typeof COLORS;
+
+interface PieDataItem {
+  name: string;
+  value: number;
+  status: StatusType;
+}
 
 export function Charts() {
   const { applications } = useApplicationsStore();
 
-  // Données pour le graphique en barres (candidatures par mois)
+  // Préparation des données mensuelles avec filtrage des mois vides
   const monthlyData = useMemo(() => {
-    const data = applications.reduce((acc, app) => {
+    // Créer un objet pour stocker les totaux par mois
+    const monthlyTotals: Record<string, number> = {};
+
+    // Compter les candidatures par mois
+    applications.forEach((app) => {
       const date = new Date(app.applicationDate);
-      const month = date.toLocaleString("fr-FR", { month: "long" });
-      acc[month] = (acc[month] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
+      const monthKey = date.toLocaleString('fr-FR', { month: 'short' });
+      monthlyTotals[monthKey] = (monthlyTotals[monthKey] || 0) + 1;
+    });
 
-    return Object.entries(data).map(([month, count]) => ({
-      month,
-      count,
-    }));
+    // Convertir en tableau et trier par date
+    return Object.entries(monthlyTotals)
+      .map(([month, total]) => ({
+        month: month.charAt(0).toUpperCase() + month.slice(1),
+        total
+      }))
+      .sort((a, b) => {
+        const months = ['Janv.', 'Févr.', 'Mars', 'Avr.', 'Mai', 'Juin', 'Juil.', 'Août', 'Sept.', 'Oct.', 'Nov.', 'Déc.'];
+        return months.indexOf(a.month) - months.indexOf(b.month);
+      });
   }, [applications]);
 
-  // Données pour le graphique en camembert (répartition par statut)
-  const statusData = useMemo(() => {
-    return [
-      { name: "En attente", value: applications.filter((app) => app.status === "pending").length },
-      { name: "Entretien", value: applications.filter((app) => app.status === "interview").length },
-      { name: "Acceptée", value: applications.filter((app) => app.status === "accepted").length },
-      { name: "Refusée", value: applications.filter((app) => app.status === "rejected").length },
+  // Données pour le diagramme circulaire
+  const pieData = useMemo<PieDataItem[]>(() => {
+    const statusCounts = {
+      pending: 0,
+      interview: 0,
+      accepted: 0,
+      rejected: 0,
+    };
+
+    applications.forEach(app => {
+      statusCounts[app.status as StatusType]++;
+    });
+
+    const items: PieDataItem[] = [
+      { 
+        name: "En attente", 
+        value: statusCounts.pending,
+        status: "pending" as const
+      },
+      { 
+        name: "Entretien", 
+        value: statusCounts.interview,
+        status: "interview" as const
+      },
+      { 
+        name: "Acceptée", 
+        value: statusCounts.accepted,
+        status: "accepted" as const
+      },
+      { 
+        name: "Refusée", 
+        value: statusCounts.rejected,
+        status: "rejected" as const
+      },
     ];
+
+    return items.filter(item => item.value > 0);
   }, [applications]);
+
+  const chartConfig = {
+    pending: {
+      label: "En attente",
+      color: COLORS.pending,
+    },
+    interview: {
+      label: "Entretien",
+      color: COLORS.interview,
+    },
+    accepted: {
+      label: "Acceptée",
+      color: COLORS.accepted,
+    },
+    rejected: {
+      label: "Refusée",
+      color: COLORS.rejected,
+    },
+  } satisfies ChartConfig;
 
   return (
     <div className="grid gap-4 md:grid-cols-2">
       <Card>
         <CardHeader>
           <CardTitle>Candidatures par mois</CardTitle>
+          <CardDescription>Evolution mensuelle</CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="h-[300px]">
-            <BarChart data={monthlyData} />
-          </div>
+        <CardContent className="h-[300px]">
+          <ChartContainer config={chartConfig}>
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart 
+                data={monthlyData}
+                margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
+              >
+                <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                <XAxis
+                  dataKey="month"
+                  tickLine={false}
+                  axisLine={false}
+                  angle={0}
+                  textAnchor="middle"
+                  height={30}
+                  fontSize={12}
+                />
+                <YAxis 
+                  tickLine={false}
+                  axisLine={false}
+                  fontSize={12}
+                />
+                <ChartTooltip content={<ChartTooltipContent />} />
+                <Bar 
+                  name="Total des candidatures"
+                  dataKey="total" 
+                  fill={COLORS.pending}
+                  radius={[4, 4, 0, 0]} 
+                  maxBarSize={40}
+                />
+              </BarChart>
+            </ResponsiveContainer>
+          </ChartContainer>
         </CardContent>
       </Card>
+
       <Card>
         <CardHeader>
           <CardTitle>Répartition par statut</CardTitle>
+          <CardDescription>Vue d'ensemble des candidatures</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="h-[300px]">
-            <PieChart data={statusData} />
+          <div className="h-[260px]">
+            <ChartContainer config={chartConfig}>
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <ChartTooltip content={<ChartTooltipContent />} />
+                  <Pie
+                    data={pieData}
+                    dataKey="value"
+                    nameKey="name"
+                    innerRadius={60}
+                    outerRadius={80}
+                    paddingAngle={2}
+                    cx="50%"
+                    cy="50%"
+                  >
+                    {pieData.map((entry, index) => (
+                      <Cell 
+                        key={`cell-${index}`} 
+                        fill={COLORS[entry.status]}
+                      />
+                    ))}
+                  </Pie>
+                </PieChart>
+              </ResponsiveContainer>
+            </ChartContainer>
+          </div>
+          <div className="mt-4 flex justify-center gap-4">
+            {pieData.map((entry, index) => (
+              <div key={index} className="flex items-center gap-2">
+                <div 
+                  className="h-3 w-3 rounded-full" 
+                  style={{ backgroundColor: COLORS[entry.status] }}
+                />
+                <span className="text-sm">{entry.name}</span>
+              </div>
+            ))}
           </div>
         </CardContent>
       </Card>
     </div>
   );
-}
-
-interface BarChartProps {
-  data: { month: string; count: number }[];
-}
-
-function BarChart({ data }: BarChartProps) {
-  const ref = React.useRef<HTMLDivElement>(null);
-
-  React.useEffect(() => {
-    if (!ref.current || !data.length) return;
-
-    const width = ref.current.clientWidth;
-    const height = 300;
-    const margin = { top: 20, right: 20, bottom: 40, left: 40 };
-
-    // Nettoyer le conteneur
-    d3.select(ref.current).selectAll("*").remove();
-
-    // Créer le SVG pour les axes
-    const svg = d3
-      .select(ref.current)
-      .append("svg")
-      .attr("width", width)
-      .attr("height", height);
-
-    // Créer les échelles
-    const x = d3
-      .scaleBand()
-      .domain(data.map((d) => d.month))
-      .range([margin.left, width - margin.right])
-      .padding(0.2);
-
-    const y = d3
-      .scaleLinear()
-      .domain([0, d3.max(data, (d) => d.count) || 0])
-      .range([height - margin.bottom, margin.top]);
-
-    // Ajouter les axes
-    svg
-      .append("g")
-      .attr("transform", `translate(0,${height - margin.bottom})`)
-      .call(d3.axisBottom(x))
-      .selectAll("text")
-      .style("text-anchor", "middle")
-      .attr("transform", "rotate(-45)");
-
-    svg
-      .append("g")
-      .attr("transform", `translate(${margin.left},0)`)
-      .call(d3.axisLeft(y));
-
-    // Créer un conteneur pour les barres
-    const barsContainer = d3
-      .select(ref.current)
-      .append("div")
-      .style("position", "absolute")
-      .style("top", "0")
-      .style("left", "0")
-      .style("width", "100%")
-      .style("height", "100%");
-
-    // Ajouter les barres avec animation
-    data.forEach((d, i) => {
-      const barWidth = x.bandwidth();
-      const barHeight = y(0) - y(d.count);
-      const barX = x(d.month) || 0;
-      const barY = y(d.count);
-
-      barsContainer
-        .append("div")
-        .style("position", "absolute")
-        .style("left", `${barX}px`)
-        .style("top", `${barY}px`)
-        .style("width", `${barWidth}px`)
-        .style("height", `${barHeight}px`)
-        .style("background-color", "#8884d8")
-        .style("border-radius", "4px")
-        .style("transition", "all 0.3s ease")
-        .style("transform-origin", "bottom")
-        .style("transform", "scaleY(0)")
-        .style("opacity", "0")
-        .transition()
-        .duration(500)
-        .delay(i * 100)
-        .style("transform", "scaleY(1)")
-        .style("opacity", "1")
-        .on("end", function() {
-          d3.select(this)
-            .style("transition", "all 0.2s ease")
-            .on("mouseover", function() {
-              d3.select(this)
-                .style("background-color", "#9c8ee8")
-                .style("transform", "scaleY(1.05)");
-            })
-            .on("mouseout", function() {
-              d3.select(this)
-                .style("background-color", "#8884d8")
-                .style("transform", "scaleY(1)");
-            });
-        });
-    });
-
-    // Ajouter les tooltips
-    const tooltip = d3
-      .select(ref.current)
-      .append("div")
-      .attr("class", "tooltip")
-      .style("opacity", 0)
-      .style("position", "absolute")
-      .style("background-color", "white")
-      .style("border", "1px solid #ddd")
-      .style("border-radius", "4px")
-      .style("padding", "8px")
-      .style("box-shadow", "0 2px 4px rgba(0,0,0,0.1)")
-      .style("pointer-events", "none");
-
-    barsContainer.selectAll("div").on("mouseover", function(event, d) {
-      tooltip.transition().duration(200).style("opacity", 1);
-      tooltip
-        .html(`
-          <div class="font-medium">${(d as { month: string }).month}</div>
-          <div class="text-sm text-muted-foreground">${(d as { count: number }).count} candidatures</div>
-        `)
-        .style("left", (event as MouseEvent).pageX + 10 + "px")
-        .style("top", (event as MouseEvent).pageY - 28 + "px");
-    }).on("mouseout", () => {
-      tooltip.transition().duration(500).style("opacity", 0);
-    });
-  }, [data]);
-
-  return <div ref={ref} className="w-full h-full relative" />;
-}
-
-interface PieChartProps {
-  data: { name: string; value: number }[];
-}
-
-function PieChart({ data }: PieChartProps) {
-  const ref = React.useRef<HTMLDivElement>(null);
-
-  React.useEffect(() => {
-    if (!ref.current || !data.length) return;
-
-    const width = ref.current.clientWidth;
-    const height = 300;
-    const radius = Math.min(width, height) / 2 - 40;
-
-    // Nettoyer le conteneur
-    d3.select(ref.current).selectAll("*").remove();
-
-    // Créer le SVG
-    const svg = d3
-      .select(ref.current)
-      .append("svg")
-      .attr("width", width)
-      .attr("height", height)
-      .append("g")
-      .attr("transform", `translate(${width / 2},${height / 2})`);
-
-    // Créer le générateur de camembert
-    const pie = d3
-      .pie<{ name: string; value: number }>()
-      .value((d) => d.value)
-      .sort(null);
-
-    const arc = d3
-      .arc<d3.PieArcDatum<{ name: string; value: number }>>()
-      .innerRadius(0)
-      .outerRadius(radius);
-
-    // Créer les arcs avec animation
-    const arcs = svg
-      .selectAll("arc")
-      .data(pie(data))
-      .enter()
-      .append("g")
-      .attr("class", "arc");
-
-    // Ajouter les chemins avec animation
-    arcs
-      .append("path")
-      .attr("d", arc)
-      .attr("fill", (d, i) => COLORS[i % COLORS.length])
-      .attr("stroke", "white")
-      .style("stroke-width", "2px")
-      .style("opacity", 0)
-      .style("transform", "scale(0)")
-      .transition()
-      .duration(500)
-      .delay((d, i) => i * 100)
-      .style("opacity", 1)
-      .style("transform", "scale(1)");
-
-    // Ajouter les labels avec animation
-    arcs
-      .append("text")
-      .attr("transform", (d) => `translate(${arc.centroid(d)})`)
-      .attr("dy", ".35em")
-      .style("text-anchor", "middle")
-      .style("font-size", "12px")
-      .style("fill", "white")
-      .style("opacity", 0)
-      .text((d) => `${d.data.name}: ${d.data.value}`)
-      .transition()
-      .duration(500)
-      .delay((d, i) => i * 100 + 300)
-      .style("opacity", 1);
-
-    // Ajouter les tooltips
-    const tooltip = d3
-      .select(ref.current)
-      .append("div")
-      .attr("class", "tooltip")
-      .style("opacity", 0)
-      .style("position", "absolute")
-      .style("background-color", "white")
-      .style("border", "1px solid #ddd")
-      .style("border-radius", "4px")
-      .style("padding", "8px")
-      .style("box-shadow", "0 2px 4px rgba(0,0,0,0.1)")
-      .style("pointer-events", "none");
-
-    arcs
-      .on("mouseover", function(event, d) {
-        d3.select(this)
-          .transition()
-          .duration(200)
-          .style("transform", "scale(1.05)");
-        
-        tooltip.transition().duration(200).style("opacity", 1);
-        tooltip
-          .html(`
-            <div class="font-medium">${d.data.name}</div>
-            <div class="text-sm text-muted-foreground">${d.data.value} candidatures</div>
-          `)
-          .style("left", (event as MouseEvent).pageX + 10 + "px")
-          .style("top", (event as MouseEvent).pageY - 28 + "px");
-      })
-      .on("mouseout", function() {
-        d3.select(this)
-          .transition()
-          .duration(200)
-          .style("transform", "scale(1)");
-        
-        tooltip.transition().duration(500).style("opacity", 0);
-      });
-  }, [data]);
-
-  return <div ref={ref} className="w-full h-full" />;
 } 
