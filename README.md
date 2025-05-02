@@ -54,7 +54,7 @@ npm run dev
 
 ## 🛠️ Configuration
 
-    1.	Crée un fichier .env.local :
+1.	Crée un fichier .env.local :
     ```bash
     NEXT_PUBLIC_FIREBASE_API_KEY=...
     NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=...
@@ -63,7 +63,7 @@ npm run dev
     NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=...
     NEXT_PUBLIC_FIREBASE_APP_ID=...```
     
-    2. Lance l'application :
+2. Lance l'application :
     ```bash
     pnpm run dev
     ```
