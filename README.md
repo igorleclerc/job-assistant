@@ -77,7 +77,7 @@ Ce projet est sous licence :
 
 Vous ne pouvez pas utiliser ce projet à des fins commerciales sans autorisation explicite.
 Aucune modification ni création de travaux dérivés n'est autorisée.
-Consultez la licence complète dans le fichier [`LICENSE`](./LICENSE).
+Consultez la licence complète dans le fichier [`LICENSE`](./LICENSE.md).
 
 ## 🧑‍💻 Développé par
 @igorleclerc avec ❤️
