@@ -28,7 +28,7 @@ Ajoute, consulte, et organise toutes tes candidatures en un seul endroit.
 ---
 
 ### Liste des candidatures
-![Liste des candidatures](/public/list.png)
+![Liste des candidatures](/public/liste.png)
 
 ---
 
