@@ -66,7 +66,7 @@ npm run dev
     2. Lance l'application :
     ```bash
     pnpm run dev
-    ````
+    ```
 ## 🤝 Contribuer
 Les contributions sont les bienvenues ! N’hésite pas à ouvrir une issue ou une PR 🙌
 
