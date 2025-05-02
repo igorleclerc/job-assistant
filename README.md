@@ -34,8 +34,9 @@ Ajoute, consulte, et organise toutes tes candidatures en un seul endroit.
 
 ## ⚙️ Stack Technique
 
-- **Next.js 13+ (App Router)**
+- **Next.js  (App Router)**
 - **TypeScript**
+- **ShadCN ui**
 - **TailwindCSS**
 - **Firebase (auth & base de données)**
 - **Vercel (déploiement)**
@@ -69,9 +70,14 @@ npm run dev
 ## 🤝 Contribuer
 Les contributions sont les bienvenues ! N’hésite pas à ouvrir une issue ou une PR 🙌
 
-## 📄 Licence
-MIT
+## 📄 License
+
+Ce projet est sous licence :
+**Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International**.
+
+Vous ne pouvez pas utiliser ce projet à des fins commerciales sans autorisation explicite.
+Aucune modification ni création de travaux dérivés n'est autorisée.
+Consultez la licence complète dans le fichier [`LICENSE`](./LICENSE).
 
 ## 🧑‍💻 Développé par
 @igorleclerc avec ❤️
-
