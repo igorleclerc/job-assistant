@@ -196,7 +196,7 @@ export default function SettingsPage() {
         </CardHeader>
         <CardContent>
           <p className="text-sm text-gray-500">
-            Version: 1.0.0
+            Version: 0.0.4
           </p>
         </CardContent>
       </Card>

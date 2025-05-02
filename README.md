@@ -1,36 +1,82 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+import Image from 'next/image'
 
-## Getting Started
+# 💼 Job Assistant
 
-First, run the development server:
+Un assistant intelligent et simple pour suivre tes candidatures d’emploi.  
+Ajoute, consulte, et organise toutes tes candidatures en un seul endroit.
+
+---
+
+## 🚀 Fonctionnalités
+
+- 📋 Ajout rapide d'une candidature
+- 🕒 Suivi de l’état : en attente, relancé, entretien, refusé, etc.
+- 🗃️ Stockage des candidatures dans Firebase
+- 📱 Design responsive compatible mobile (en cours d'adaptation)
+- 🔐 Authentification simple
+
+---
+
+## 🖼️ Aperçus de l’application
+
+### Page d’accueil
+
+<Image src="/home.png" alt="Aperçu de la page d’accueil" width={800} height={450} />
+
+---
+
+### Formulaire d’ajout d’une candidature
+
+<Image src="/form.png" alt="Formulaire de candidature" width={800} height={450} />
+
+---
+
+### Liste des candidatures
+
+<Image src="/list.png" alt="Liste des candidatures" width={800} height={450} />
+
+---
+
+## ⚙️ Stack Technique
+
+- **Next.js 13+ (App Router)**
+- **TypeScript**
+- **TailwindCSS**
+- **Firebase (auth & base de données)**
+- **Vercel (déploiement)**
+
+---
+
+## 📦 Installation
 
 ```bash
+git clone https://github.com/ton-pseudo/job-assistant.git
+cd job-assistant
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🛠️ Configuration
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+    1.	Crée un fichier .env.local :
+    ```bash
+    NEXT_PUBLIC_FIREBASE_API_KEY=...
+    NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=...
+    NEXT_PUBLIC_FIREBASE_PROJECT_ID=...
+    NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=...
+    NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=...
+    NEXT_PUBLIC_FIREBASE_APP_ID=...```
+    
+    2. Lance l'application :
+    ```bash
+    pnpm run dev
+    ````
+## 🤝 Contribuer
+Les contributions sont les bienvenues ! N’hésite pas à ouvrir une issue ou une PR 🙌
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📄 Licence
+MIT — Lire la licence
 
-## Learn More
+## 🧑‍💻 Développé par
+@igorleclerc avec ❤️
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
