@@ -18,17 +18,17 @@ Ajoute, consulte, et organise toutes tes candidatures en un seul endroit.
 ## 🖼️ Aperçus de l’application
 
 ### Page d’accueil
-![Home page](https://github.com/igorleclerc/job-assistant/tree/main/public/home.png?raw=true)
+![Home page](https://github.com/igorleclerc/job-assistant/tree/main/public/home.png)
 
 ---
 
 ### Formulaire d’ajout d’une candidature
-![Formulaire d'ajout de candidature](https://github.com/igorleclerc/job-assistant/tree/main/public/form.png?raw=true)
+![Formulaire d'ajout de candidature](https://github.com/igorleclerc/job-assistant/tree/main/public/form.png)
 
 ---
 
 ### Liste des candidatures
-![Liste des candidatures](https://github.com/igorleclerc/job-assistant/tree/main/public/list.png?raw=true)
+![Liste des candidatures](https://github.com/igorleclerc/job-assistant/tree/main/public/list.png)
 
 ---
 
