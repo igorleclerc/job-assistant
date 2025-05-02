@@ -23,12 +23,12 @@ Ajoute, consulte, et organise toutes tes candidatures en un seul endroit.
 ---
 
 ### Formulaire d’ajout d’une candidature
-![Formulaire d'ajout de candidature](https://github.com/igorleclerc/job-assistant/tree/main/public/form.png)
+![Formulaire d'ajout de candidature](/public/form.png)
 
 ---
 
 ### Liste des candidatures
-![Liste des candidatures](https://github.com/igorleclerc/job-assistant/tree/main/public/list.png)
+![Liste des candidatures](/public/list.png)
 
 ---
 
