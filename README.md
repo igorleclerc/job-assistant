@@ -1,5 +1,3 @@
-import Image from 'next/image'
-
 # 💼 Job Assistant
 
 Un assistant intelligent et simple pour suivre tes candidatures d’emploi.  
@@ -20,20 +18,17 @@ Ajoute, consulte, et organise toutes tes candidatures en un seul endroit.
 ## 🖼️ Aperçus de l’application
 
 ### Page d’accueil
-
-<Image src="/home.png" alt="Aperçu de la page d’accueil" width={800} height={450} />
+![Home page](https://github.com/igorleclerc/job-assistant/tree/main/public/home.png?raw=true)
 
 ---
 
 ### Formulaire d’ajout d’une candidature
-
-<Image src="/form.png" alt="Formulaire de candidature" width={800} height={450} />
+![Formulaire d'ajout de candidature](https://github.com/igorleclerc/job-assistant/tree/main/public/form.png?raw=true)
 
 ---
 
 ### Liste des candidatures
-
-<Image src="/list.png" alt="Liste des candidatures" width={800} height={450} />
+![Liste des candidatures](https://github.com/igorleclerc/job-assistant/tree/main/public/list.png?raw=true)
 
 ---
 
@@ -75,7 +70,7 @@ npm run dev
 Les contributions sont les bienvenues ! N’hésite pas à ouvrir une issue ou une PR 🙌
 
 ## 📄 Licence
-MIT — Lire la licence
+MIT
 
 ## 🧑‍💻 Développé par
 @igorleclerc avec ❤️
