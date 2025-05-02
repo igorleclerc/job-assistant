@@ -18,7 +18,7 @@ Ajoute, consulte, et organise toutes tes candidatures en un seul endroit.
 ## 🖼️ Aperçus de l’application
 
 ### Page d’accueil
-![Home page](https://github.com/igorleclerc/job-assistant/tree/main/public/home.png)
+![Home page](public/home.png)
 
 ---
 
